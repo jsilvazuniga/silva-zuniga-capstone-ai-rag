@@ -1,0 +1,32 @@
+FastAPI handles async endpoints using Python's `async` and `await` syntax, allowing for non-blocking I/O operations. This is particularly useful for I/O-bound tasks, such as database queries or API calls, where you want to handle multiple requests concurrently without waiting for each one to finish.
+
+### Example of an Async Endpoint in FastAPI
+
+Here's a simple example demonstrating how to create an async endpoint:
+
+```python
+from fastapi import FastAPI
+import asyncio
+
+app = FastAPI()
+
+async def fake_database_query():
+    await asyncio.sleep(2)  # Simulates a database query delay
+    return {"data": "This is the result from the database"}
+
+@app.get("/items/")
+async def read_items():
+    result = await fake_database_query()
+    return result
+```
+
+### Explanation:
+1. **FastAPI Instance**: We create an instance of `FastAPI`.
+2. **Async Function**: `fake_database_query` simulates an asynchronous operation (like a database query) using `asyncio.sleep`.
+3. **Async Endpoint**: The `read_items` function is defined as an async function. It awaits the result of `fake_database_query`, allowing other requests to be processed while waiting.
+4. **Running the Server**: You can run this FastAPI app using `uvicorn`:
+   ```bash
+   uvicorn your_module_name:app --reload
+   ```
+
+This setup allows FastAPI to handle multiple requests efficiently, making it suitable for high-performance applications.
